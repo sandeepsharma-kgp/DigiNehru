@@ -13,7 +13,7 @@ class FoodType(models.Model):
 
 class FoodItem(models.Model):
     food_name = models.CharField(max_length=100)
-    type_name = models.ForeignKey(FoodType, default=0)
+    type_name = models.ForeignKey(FoodType)
     vn = models.CharField(max_length=2, choices=VN_CHOICES)
 
 

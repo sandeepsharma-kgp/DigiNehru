@@ -82,12 +82,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'ATOMIC_REQUESTS': True,
         'NAME': 'DigiNehru',
-                'USER': 'root',
-                'PASSWORD': 'digitalnehru',
-                # 'HOST': 'march-28-v1.cd1xokc1nbn4.ap-southeast-1.rds.amazonaws.com',
-                # 'HOST': 'april24.cawagrsehx6w.ap-south-1.rds.amazonaws.com',
-                'HOST': '127.0.0.1',
-                'PORT': '3306',
+        'USER': 'root',
+        'PASSWORD': 'digitalnehru',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
