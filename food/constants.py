@@ -2,7 +2,7 @@
 MON = 0
 TUE = 1
 WED = 2
-THR = 3
+THU = 3
 FRI = 4
 SAT = 5
 SUN = 6
@@ -19,7 +19,7 @@ DAY_CHOICES = ((SUN, 'Sunday'),
                (MON, 'Monday'),
                (TUE, 'Tuesday'),
                (WED, 'Wednesday'),
-               (THR, 'Thursday'),
+               (THU, 'Thursday'),
                (FRI, 'Friday'),
                (SAT, 'Saturday'))
 TIME_CHOICES = ((BREAKFAST, 'Breakfast'),
