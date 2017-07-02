@@ -12,7 +12,7 @@ LUNCH = 1
 SNACKS = 2
 DINNER = 3
 
-VEG = 'V'
+VEG = 'VE'
 NON_VEG = 'NV'
 
 DAY_CHOICES = ((SUN, 'Sunday'),
