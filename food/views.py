@@ -49,14 +49,14 @@ class FoodEntry(View):
 
     def post(self, request, *args, **kwargs):
         data = request.POST
-        food_name = data['food_name']
-        food_type = data['food_type']
-        vn = []
-        vn.append(data['vn'])
+        food_name = data['food_name'].lower()
+        type_name = data['food_type'].lower()
+        vn = data.getlist('vn')
 
         try:
+            type_name = FoodType.objects.get(type_name=type_name)
             FoodItem.objects.create(
-                food_name=food_name, food_type=food_type, vn=vn)
+                food_name=food_name, type_name=type_name, vn=vn)
 
             self.response['res_str'] = "Data added"
             return send_200(self.response)
@@ -64,6 +64,43 @@ class FoodEntry(View):
             print e
             self.response['res_str'] = "Data not added"
             return send_400(self.response)
+
+    def get(self, request, *args, **kwargs):
+        food_data = FoodItem.objects.all().values_list('pk', 'food_name')
+        food_list = {}
+        for i in food_data:
+            food_list[i[0]] = i[1]
+        self.response['res_str'] = "food_list"
+        self.response['res_data'] = food_list
+        return send_200(self.response)
+
+
+class FoodTypeName(View):
+
+    def __init__(self):
+        self.response = init_response()
+
+    def post(self, request, *args, **kwargs):
+        data = request.POST
+        type_name = data['type_name'].lower()
+
+        try:
+            FoodType.objects.create(type_name=type_name)
+            self.response['res_str'] = "Data added"
+            return send_200(self.response)
+        except Exception as e:
+            print e
+            self.response['res_str'] = "Data not added"
+            return send_400(self.response)
+
+    def get(self, request, *args, **kwargs):
+        type_data = FoodType.objects.all().values_list('pk', 'type_name')
+        type_list = {}
+        for i in type_data:
+            type_list[i[0]] = i[1]
+        self.response['res_str'] = "type_list"
+        self.response['res_data'] = type_list
+        return send_200(self.response)
 
 
 class MenuEntry(View):
@@ -73,19 +110,52 @@ class MenuEntry(View):
 
     def post(self, request, *args, **kwargs):
         data = request.POST
-        day = []
-        time = []
-        day.append(data['day'])
-        time.append(data['time'])
+        day = data['day']
+        time = data['time']
         food_item = data['food_item']
+        food_item = food_item.split(",")
+        import ipdb
+        ipdb.set_trace()
 
         try:
-            Menu.objects.create(
-                day=day, time=time, food_item=food_item)
+            food_item = FoodItem.objects.filter(pk__in=food_item)
+            try:
+                menu = Menu.objects.get(day=day, time=time)
+            except:
+                menu = None
+            if not menu:
+                menu = Menu.objects.create(
+                    day=day, time=time)
+                setattr(menu, 'food_item', food_item)
+                self.response['res_str'] = "Data added"
+                return send_200(self.response)
+            else:
+                setattr(menu, 'food_item', food_item)
+                self.response['res_str'] = "Data added"
+                return send_200(self.response)
 
-            self.response['res_str'] = "Data added"
-            return send_200(self.response)
         except Exception as e:
             print e
             self.response['res_str'] = "Data not added"
             return send_400(self.response)
+
+    def get(self, request, *args, **kwargs):
+        data = request.GET
+        day = data['day']
+        time = data['time']
+        vn = data['vn']
+        import ipdb
+        ipdb.set_trace()
+        menu = Menu.objects.all()
+        if day:
+            menu = menu.filter(day=day)
+        if time:
+            menu = menu.filter(time=time)
+        qs_json = {}
+
+        for qs in menu:
+            qs_json[qs.id] = qs.serializer(True, vn)
+
+        self.response['res_str'] = "menu_list"
+        self.response['res_data'] = qs_json
+        return send_200(self.response)

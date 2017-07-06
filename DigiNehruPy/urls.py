@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^student/', include('students.urls')),
     url(r'^staff/', include('staff.urls')),
     url(r'^food/', include('food.urls')),
+    url(r'^studentmeal/', include('studentmeal.urls')),
 ]

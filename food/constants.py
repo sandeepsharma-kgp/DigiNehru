@@ -15,6 +15,7 @@ DINNER = 3
 VEG = 'VE'
 NON_VEG = 'NV'
 
+
 DAY_CHOICES = ((SUN, 'Sunday'),
                (MON, 'Monday'),
                (TUE, 'Tuesday'),
