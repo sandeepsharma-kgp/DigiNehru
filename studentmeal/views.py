@@ -59,6 +59,7 @@ class StudentMenuEntry(View):
         meal[SNACKS] = {}
         meal[DINNER] = {}
         roll = data['roll']
+        meals_opted = []
         # eating_on = data['date']
         import ipdb
         ipdb.set_trace()
@@ -67,23 +68,49 @@ class StudentMenuEntry(View):
         if data['breakfast']:
             meal[BREAKFAST]['vn'] = data['breakfast_vn']
             meal[BREAKFAST]['menu'] = data.getlist('breakfast')
+            meals_opted.append(str(BREAKFAST))
         if data['lunch']:
             meal[LUNCH]['vn'] = data['lunch_vn']
             meal[LUNCH]['menu'] = data.getlist('lunch')
+            meals_opted.append(str(LUNCH))
         if data['snacks']:
             meal[SNACKS]['vn'] = data['snacks_vn']
             meal[SNACKS]['menu'] = data.getlist('snacks')
+            meals_opted.append(str(SNACKS))
         if data['dinner']:
             meal[DINNER]['vn'] = data['dinner_vn']
             meal[DINNER]['menu'] = data.getlist('dinner')
+            meals_opted.append(str(DINNER))
 
         try:
             roll = Students.objects.get(roll=roll)
-            eating.objects.create(student_roll=roll, eating_on=eating_on,
-                                  eating_item=meal, meals_taken=[])
-            self.response['res_str'] = "Data added"
-            return send_200(self.response)
+            try:
+                eat = eating.objects.get(student_roll=roll,
+                                         eating_on=eating_on)
+            except:
+                eat = None
+
+            if eat:
+                eat.eating_item = meal
+                eat.meals_opted = meals_opted
+                eat.save()
+                self.response['res_str'] = "Data added"
+                return send_200(self.response)
+            else:
+                eating.objects.create(student=roll, eating_on=eating_on,
+                                      eating_item=meal, meals_taken=[],
+                                      meals_opted=meals_opted)
+                self.response['res_str'] = "Data added"
+                return send_200(self.response)
         except Exception as e:
             print e
             self.response['res_str'] = "Data not added"
             return send_400(self.response)
+
+    def get(self, request, *args, **kwargs):
+        data = request.GET
+        roll = data['roll']
+        eat = eating.objects.get(student=roll)
+        self.response['res_str'] = "eating_items"
+        self.response['res_data'] = eat.serializer()
+        return send_200(self.response)
