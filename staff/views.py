@@ -6,6 +6,9 @@ from .models import Staff
 from django.views.generic import ListView, DetailView, TemplateView, View
 from django.http.response import JsonResponse
 from django.core.mail import EmailMultiAlternatives
+import uuid
+from DigiNehruPy.utils import setex
+from DigiNehruPy.decorator import check_login
 # Create your views here.
 
 
@@ -77,19 +80,32 @@ class StaffSignUp(View):
 
 class StaffLogin(View):
 
+    def __init__(self):
+        self.response = init_response()
+
     def post(self, request, *args, **kwargs):
         data = request.POST
         empid = data['empid']
         password = data['password']
+        import ipdb
+        ipdb.set_trace()
 
         try:
             st = Staff.objects.get(empid=empid, password=password)
-            if st:
-                return True
-            else:
-                return False
-        except Exception as e:
-            print e
+        except:
+            st = None
+        if st:
+            # st.token = uuid.uuid1()
+            # st.save()
+            token = uuid.uuid1()
+            setex(st.empid, token, 900)
+            self.response['res_str'] = "staff-detail"
+            self.response['res_data'] = st.serializer()
+            self.response['token'] = token
+            return send_200(self.response)
+        else:
+            self.response['res_str'] = "staff not exist"
+            return send_400(self.response)
 
 
 class ForgotPassword(View):

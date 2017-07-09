@@ -110,7 +110,10 @@ class StudentMenuEntry(View):
     def get(self, request, *args, **kwargs):
         data = request.GET
         roll = data['roll']
-        eat = eating.objects.get(student=roll)
+        eat = eating.objects.filter(student=roll)
+        eatings = {}
+        for i in eat:
+            eatings[str(i.eating_on)] = i.serializer()
         self.response['res_str'] = "eating_items"
-        self.response['res_data'] = eat.serializer()
+        self.response['res_data'] = eatings
         return send_200(self.response)

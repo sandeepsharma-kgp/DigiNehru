@@ -6,6 +6,7 @@ from .models import FoodItem, FoodType, Menu
 from django.views.generic import ListView, DetailView, TemplateView, View
 from django.http.response import JsonResponse
 from django.core.mail import EmailMultiAlternatives
+from DigiNehruPy.decorator import check_login
 # Create your views here.
 
 
@@ -47,11 +48,14 @@ class FoodEntry(View):
     def __init__(self):
         self.response = init_response()
 
+    @check_login
     def post(self, request, *args, **kwargs):
         data = request.POST
         food_name = data['food_name'].lower()
         type_name = data['food_type'].lower()
         vn = data.getlist('vn')
+        import ipdb
+        ipdb.set_trace()
 
         try:
             type_name = FoodType.objects.get(type_name=type_name)
@@ -65,6 +69,7 @@ class FoodEntry(View):
             self.response['res_str'] = "Data not added"
             return send_400(self.response)
 
+    @check_login
     def get(self, request, *args, **kwargs):
         food_data = FoodItem.objects.all().values_list('pk', 'food_name')
         food_list = {}
@@ -144,8 +149,6 @@ class MenuEntry(View):
         day = data['day']
         time = data['time']
         vn = data['vn']
-        import ipdb
-        ipdb.set_trace()
         menu = Menu.objects.all()
         if day:
             menu = menu.filter(day=day)

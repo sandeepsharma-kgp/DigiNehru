@@ -7,7 +7,7 @@ from students.models import Students
 from food.models import Menu
 from food.constants import TIME_CHOICES, VN_CHOICES
 from multiselectfield import MultiSelectField
-from food.utils import get_all_fields
+from DigiNehruPy.utils import get_all_fields
 # Create your models here.
 
 

@@ -6,4 +6,6 @@ from . import views
 urlpatterns = [
     url(r'^staffregister/$', csrf_exempt(views.StaffSignUp.as_view()),
         name='staff-registration'),
+    url(r'^stafflogin/$', csrf_exempt(views.StaffLogin.as_view()),
+        name='staff-login'),
 ]

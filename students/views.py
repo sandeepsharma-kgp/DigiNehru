@@ -6,6 +6,7 @@ from .models import Students
 from django.views.generic import ListView, DetailView, TemplateView, View
 from django.http.response import JsonResponse
 from django.core.mail import EmailMultiAlternatives
+import uuid
 # Create your views here.
 
 
@@ -101,6 +102,9 @@ class StudentSignUp(View):
 
 class StudentLogin(View):
 
+    def __init__(self):
+        self.response = init_response()
+
     def post(self, request, *args, **kwargs):
         data = request.POST
         roll = data['roll']
@@ -108,12 +112,17 @@ class StudentLogin(View):
 
         try:
             st = Students.objects.get(roll=roll, password=password)
-            if st:
-                return True
-            else:
-                return False
-        except Exception as e:
-            print e
+        except:
+            st = None
+        if st:
+            st.token = uuid.uuid1()
+            st.save()
+            self.response['res_str'] = "student-detail"
+            self.response['res_data'] = st.serializer()
+            return send_200(self.response)
+        else:
+            self.response['res_str'] = "student not exist"
+            return send_400(self.response)
 
 
 class ForgotPassword(View):
