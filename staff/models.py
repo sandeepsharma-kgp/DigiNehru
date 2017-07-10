@@ -9,7 +9,24 @@ from DigiNehruPy.utils import get_all_fields
 # Create your models here.
 
 
-class Permission(models.Model):
+class Base(models.Model):
+    ACTIVE = 0
+    INACTIVE = 1
+
+    STATUS_CHOICE = ((ACTIVE, 'Active'),
+                     (INACTIVE, 'Inactive')
+                     )
+
+    created_on = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_on = models.DateTimeField(auto_now=True, db_index=True)
+    is_deleted = models.SmallIntegerField(default=ACTIVE,
+                                          choices=STATUS_CHOICE)
+
+    class Meta:
+        abstract = True
+
+
+class Permission(Base):
     api_name = models.CharField(max_length=200)
     method = MultiSelectField(
         max_choices=4, choices=METHOD_CHOICES, default=GET)
@@ -21,7 +38,7 @@ class Permission(models.Model):
         return str(self.api_name) + ' - ' + str(self.method)
 
 
-class Role(models.Model):
+class Role(Base):
     name = models.CharField(max_length=200)
     permissions = models.ManyToManyField(Permission)
 
@@ -32,7 +49,7 @@ class Role(models.Model):
         return str(self.name) + ' - ' + str(self.permissions)
 
 
-class Staff(models.Model):
+class Staff(Base):
     name = models.CharField(max_length=200)
     empid = models.CharField(max_length=20, primary_key=True)
     email = models.EmailField(max_length=254)

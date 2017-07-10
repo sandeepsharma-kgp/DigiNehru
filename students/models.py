@@ -6,7 +6,24 @@ from food.utils import get_all_fields
 # Create your models here.
 
 
-class Students(models.Model):
+class Base(models.Model):
+    ACTIVE = 0
+    INACTIVE = 1
+
+    STATUS_CHOICE = ((ACTIVE, 'Active'),
+                     (INACTIVE, 'Inactive')
+                     )
+
+    created_on = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_on = models.DateTimeField(auto_now=True, db_index=True)
+    is_deleted = models.SmallIntegerField(default=ACTIVE,
+                                          choices=STATUS_CHOICE)
+
+    class Meta:
+        abstract = True
+
+
+class Students(Base):
     name = models.CharField(max_length=200)
     roll = models.CharField(max_length=20, primary_key=True)
     room = models.CharField(max_length=10)

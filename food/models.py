@@ -11,7 +11,24 @@ from .utils import get_all_fields
 # Create your models here.
 
 
-class FoodType(models.Model):
+class Base(models.Model):
+    ACTIVE = 0
+    INACTIVE = 1
+
+    STATUS_CHOICE = ((ACTIVE, 'Active'),
+                     (INACTIVE, 'Inactive')
+                     )
+
+    created_on = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_on = models.DateTimeField(auto_now=True, db_index=True)
+    is_deleted = models.SmallIntegerField(default=ACTIVE,
+                                          choices=STATUS_CHOICE)
+
+    class Meta:
+        abstract = True
+
+
+class FoodType(Base):
     type_name = models.CharField(max_length=100, unique=True)
 
     def __unicode__(self):
@@ -27,11 +44,10 @@ class FoodType(models.Model):
     #     return data
 
 
-class FoodItem(models.Model):
+class FoodItem(Base):
     food_name = models.CharField(max_length=100, unique=True)
     type_name = models.ForeignKey(FoodType, on_delete=models.CASCADE)
     vn = MultiSelectField(choices=VN_CHOICES, max_choices=2, default=VEG)
-    status = models.BooleanField(default=True)
 
     def __unicode__(self):
         return str(self.food_name)
@@ -56,7 +72,7 @@ class FoodItem(models.Model):
         return data
 
 
-class Menu(models.Model):
+class Menu(Base):
     day = models.PositiveIntegerField(
         choices=DAY_CHOICES, default=MON)
     time = models.PositiveIntegerField(

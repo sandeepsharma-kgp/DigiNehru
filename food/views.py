@@ -54,9 +54,6 @@ class FoodEntry(View):
         food_name = data['food_name'].lower()
         type_name = data['food_type'].lower()
         vn = data.getlist('vn')
-        import ipdb
-        ipdb.set_trace()
-
         try:
             type_name = FoodType.objects.get(type_name=type_name)
             FoodItem.objects.create(
