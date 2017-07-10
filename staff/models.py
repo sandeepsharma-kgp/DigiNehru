@@ -19,8 +19,8 @@ class Base(models.Model):
 
     created_on = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_on = models.DateTimeField(auto_now=True, db_index=True)
-    is_deleted = models.SmallIntegerField(default=ACTIVE,
-                                          choices=STATUS_CHOICE)
+    status = models.SmallIntegerField(default=ACTIVE,
+                                      choices=STATUS_CHOICE)
 
     class Meta:
         abstract = True
