@@ -111,9 +111,40 @@ class StudentMenuEntry(View):
         data = request.GET
         roll = data['roll']
         eat = eating.objects.filter(student=roll)
+        dated = data['date']
+        if dated:
+            eat = eating.objects.filter(eating_on=dated)
         eatings = {}
         for i in eat:
             eatings[str(i.eating_on)] = i.serializer()
         self.response['res_str'] = "eating_items"
         self.response['res_data'] = eatings
+        return send_200(self.response)
+
+
+class StudentMealTaken():
+
+    def __init__(self):
+        self.response = init_response()
+
+    def post(self, request, *args, **kwargs):
+        data = request.POST
+        roll = data['roll']
+        dated = data['dated']
+        time = data['time']
+        try:
+            eat = eating.objects.filter(eating_on=dated, student=roll)
+        except:
+            self.response['res_str'] = \
+                        "You are not registered for any meal on this day"
+            return send_400(self.response)
+        if time in eat.meals_opted:
+            eat.meals_taken = time
+            eat.save()
+        else:
+            self.response['res_str'] = \
+                        "You are not registered for this meal on this day"
+            return send_400(self.response)
+
+        self.response['res_str'] = "You are good to get your food!"
         return send_200(self.response)

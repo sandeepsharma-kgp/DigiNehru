@@ -7,7 +7,8 @@ from .constants import (DAY_CHOICES, TIME_CHOICES,
                         VN_CHOICES, MON, BREAKFAST,
                         VEG)
 from .utils import get_all_fields
-
+from datetime import datetime
+from DigiNehruPy.utils import convert_date
 # Create your models here.
 
 
@@ -58,15 +59,20 @@ class FoodItem(Base):
                                     self._meta.many_to_many)
         if not vn or vn in self.vn and self.status:
             for field in field_list:
-                data[field.name] = getattr(self, field.name)
                 if field.many_to_one:
-                    data[field.name] = getattr(self, field.name).type_name
+                    data[field.name] = {getattr(self, field.name).id: getattr(
+                        self, field.name).type_name}
                 elif field.many_to_many:
                     m2m_list = []
                     if m2m:
                         m2m_list = [obj.serializer()
                                     for obj in getattr(self, field.name).all()]
                         data[field.name] = m2m_list
+                else:
+                    if isinstance(getattr(self, field.name), datetime):
+                        data[field.name] = convert_date(getattr(self, field.name), '%Y-%m-%d %H:%M:%S')
+                    else:
+                        data[field.name] = getattr(self, field.name)
 
         # here goes properties
         return data

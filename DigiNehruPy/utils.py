@@ -23,3 +23,8 @@ def delete_token(varname):
 def get_all_fields(field_list_1, field_list_2):
     field_list = list(field_list_1) + list((field_list_2))
     return field_list
+
+
+def convert_date(date_field, date_format):
+    # convert_date will convert the date in given format
+    return date_field.strftime(date_format)

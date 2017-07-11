@@ -87,9 +87,6 @@ class StaffLogin(View):
         data = request.POST
         empid = data['empid']
         password = data['password']
-        import ipdb
-        ipdb.set_trace()
-
         try:
             st = Staff.objects.get(empid=empid, password=password)
         except:
