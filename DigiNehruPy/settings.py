@@ -73,7 +73,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'DigiNehruPy.wsgi.application'
 
-
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'diginehru@gmail.com'
+EMAIL_HOST_PASSWORD = 'digitalnehru'
+EMAIL_USE_TLS = True
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -88,7 +91,10 @@ DATABASES = {
         'PORT': '3306',
     }
 }
-
+AWS_ACCESS_KEY_ID = "AKIAIHJ2PFMPER7HUWCA"
+AWS_SECRET_ACCESS_KEY = "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"
+AWS_STORAGE_BUCKET_NAME = "diginehru"
+REGION_HOST = "s3.ap-south-1.amazonaws.com"
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

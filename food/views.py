@@ -7,6 +7,8 @@ from django.views.generic import ListView, DetailView, TemplateView, View
 from django.http.response import JsonResponse
 from django.core.mail import EmailMultiAlternatives
 from DigiNehruPy.decorator import check_login
+from datetime import datetime, timedelta
+import pytz
 # Create your views here.
 
 
@@ -116,9 +118,6 @@ class MenuEntry(View):
         time = data['time']
         food_item = data['food_item']
         food_item = food_item.split(",")
-        import ipdb
-        ipdb.set_trace()
-
         try:
             food_item = FoodItem.objects.filter(pk__in=food_item)
             try:
@@ -144,6 +143,11 @@ class MenuEntry(View):
     def get(self, request, *args, **kwargs):
         data = request.GET
         day = data['day']
+        if data['limited']:
+            if day == 0:
+                day = datetime.now(pytz.utc).weekday()
+            else:
+                day = (datetime.now(pytz.utc) + timedelta(1)).weekday()
         time = data['time']
         vn = data['vn']
         menu = Menu.objects.all()

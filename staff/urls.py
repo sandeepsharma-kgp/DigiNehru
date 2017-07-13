@@ -8,4 +8,6 @@ urlpatterns = [
         name='staff-registration'),
     url(r'^stafflogin/$', csrf_exempt(views.StaffLogin.as_view()),
         name='staff-login'),
+    url(r'^staffforgot/$', csrf_exempt(views.StaffLogin.as_view()),
+        name='staff-forgot'),
 ]

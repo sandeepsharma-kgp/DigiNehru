@@ -70,7 +70,8 @@ class FoodItem(Base):
                         data[field.name] = m2m_list
                 else:
                     if isinstance(getattr(self, field.name), datetime):
-                        data[field.name] = convert_date(getattr(self, field.name), '%Y-%m-%d %H:%M:%S')
+                        data[field.name] = convert_date(
+                            getattr(self, field.name), '%Y-%m-%d %H:%M:%S')
                     else:
                         data[field.name] = getattr(self, field.name)
 

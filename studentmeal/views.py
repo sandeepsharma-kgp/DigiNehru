@@ -7,7 +7,7 @@ from django.http.response import JsonResponse
 from django.core.mail import EmailMultiAlternatives
 from food.constants import BREAKFAST, LUNCH, SNACKS, DINNER
 from .models import eating
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 from students.models import Students
 # Create your views here.
@@ -63,7 +63,14 @@ class StudentMenuEntry(View):
         # eating_on = data['date']
         import ipdb
         ipdb.set_trace()
-        eating_on = datetime.now(pytz.utc).date()
+        day = data['day']
+
+        if day == 0:
+            day = datetime.now(pytz.utc).weekday()
+        else:
+            day = (datetime.now(pytz.utc) + timedelta(1)).weekday()
+
+        eating_on = day
 
         if data['breakfast']:
             meal[BREAKFAST]['vn'] = data['breakfast_vn']
@@ -111,8 +118,12 @@ class StudentMenuEntry(View):
         data = request.GET
         roll = data['roll']
         eat = eating.objects.filter(student=roll)
-        dated = data['date']
-        if dated:
+        day = data['day']
+        if data['limited']:
+            if day == 0:
+                dated = datetime.now(pytz.utc).weekday()
+            else:
+                dated = (datetime.now(pytz.utc) + timedelta(1)).weekday()
             eat = eating.objects.filter(eating_on=dated)
         eatings = {}
         for i in eat:
@@ -136,14 +147,14 @@ class StudentMealTaken():
             eat = eating.objects.filter(eating_on=dated, student=roll)
         except:
             self.response['res_str'] = \
-                        "You are not registered for any meal on this day"
+                "You are not registered for any meal on this day"
             return send_400(self.response)
         if time in eat.meals_opted:
             eat.meals_taken = time
             eat.save()
         else:
             self.response['res_str'] = \
-                        "You are not registered for this meal on this day"
+                "You are not registered for this meal on this day"
             return send_400(self.response)
 
         self.response['res_str'] = "You are good to get your food!"

@@ -1,12 +1,23 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
+import os
 from django.shortcuts import render
 from .models import Students
 from django.views.generic import ListView, DetailView, TemplateView, View
 from django.http.response import JsonResponse
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, get_connection
 import uuid
+from DigiNehruPy.settings import (EMAIL_HOST, EMAIL_HOST_USER,
+                                  EMAIL_HOST_PASSWORD,
+                                  AWS_ACCESS_KEY_ID,
+                                  AWS_SECRET_ACCESS_KEY,
+                                  AWS_STORAGE_BUCKET_NAME,
+                                  REGION_HOST)
+from DigiNehruPy.server_config import PROJECT_PATH, S3_BUCKET
+from boto.s3.key import Key
+from boto.s3.connection import S3Connection
+from tasks import add
+IMAGE_PATH = PROJECT_PATH + 'PROFILE_IMAGES/'
 # Create your views here.
 
 
@@ -29,18 +40,39 @@ def init_response(res_str=None, data=None):
     return response
 
 
-def send_email(email):
-    from_email = "sandeep@happay.in"
+def send_email(email, password):
+    connection = get_connection(username=EMAIL_HOST_USER,
+                                password=EMAIL_HOST_PASSWORD,
+                                fail_silently=False)
+
+    from_email = "sandeepsharma.iit@gmail.in"
     subject = "Change Password"
     to_email = email
     to = [to_email]
-    email_text = "link"
+    email_text = password
+    message_arr = []
     msg = EmailMultiAlternatives(
         subject, email_text, from_email, to)
+    message_arr.append(msg)
     try:
-        msg.send()
-    except:
-        pass
+        connection.open()
+        connection.send_messages(message_arr)
+        connection.close()
+    except Exception as e:
+        print e
+
+
+def copy_contents_to_s3_public(s3_file_name, file_path):
+    conn = S3Connection(AWS_ACCESS_KEY_ID,
+                        AWS_SECRET_ACCESS_KEY, host=REGION_HOST)
+    bucket = conn.get_bucket(AWS_STORAGE_BUCKET_NAME)
+    k = Key(bucket)
+    k.key = s3_file_name
+    k.set_contents_from_filename(file_path)
+    k.set_acl('public-read')
+    k.close()
+    s3_link = S3_BUCKET + s3_file_name
+    return s3_link
 
 
 class StudentSignUp(View):
@@ -66,13 +98,18 @@ class StudentSignUp(View):
         st.save()
 
     def post(self, request, *args, **kwargs):
+        import ipdb
+        ipdb.set_trace()
         data = request.POST
+        file = request.FILES
         name = data['name']
         roll = data['roll']
         room = data['room']
         email = data['email']
         mobile = data['mobile']
         password = data['password']
+        profile = file['profile']
+        add.apply_async(args=[])
 
         st = None
 
@@ -86,10 +123,20 @@ class StudentSignUp(View):
 
         try:
             if not st:
+                print "in generate image url"
+                if not os.path.exists(IMAGE_PATH):
+                    os.makedirs(IMAGE_PATH)
+                    os.chmod(IMAGE_PATH, 0777)
+                image_src = IMAGE_PATH + roll + '.png'
+                f = open(image_src, 'w')
+                f.write(profile.read())
+                f.close()
+                s3_path = 'profileimages/' + roll
+                s3_link = copy_contents_to_s3_public(s3_path, image_src)
                 Students.objects.create(
                     name=name, roll=roll, room=room,
                     email=email, mobile=mobile,
-                    password=password)
+                    password=password, profile=s3_link)
             else:
                 raise Exception('Student already registered')
             self.response['res_str'] = "Data added"
@@ -127,15 +174,21 @@ class StudentLogin(View):
 
 class ForgotPassword(View):
 
+    def __init__(self):
+        self.response = init_response()
+
     def get(self, request, *args, **kwargs):
         data = request.GET
         roll = data['roll']
 
         st = Students.objects.get(roll=roll)
+        password = "123456"
+        st.password = password
+        st.save()
 
-        email = st.email
+        email = "sandeep.sharma@happay.in"
 
-        send_email(email)
+        send_email(email, password)
 
         self.response['res_str'] = "Link sent"
         return send_200(self.response)

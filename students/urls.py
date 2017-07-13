@@ -8,6 +8,6 @@ urlpatterns = [
         name='student-registration'),
     url(r'^studentlogin/$',
         csrf_exempt(views.StudentLogin.as_view()), name='student-login'),
-    url(r'^studentforgot/(?P<pk>[0-9]+)/$',
+    url(r'^studentforgot/$',
         views.ForgotPassword.as_view(), name='student-forgot'),
 ]

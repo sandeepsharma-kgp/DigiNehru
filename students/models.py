@@ -31,6 +31,7 @@ class Students(Base):
     mobile = models.CharField(max_length=12)
     password = models.CharField(max_length=200)
     token = models.CharField(max_length=200, blank=True, null=True)
+    profile = models.URLField(max_length=1000, blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'Students'
