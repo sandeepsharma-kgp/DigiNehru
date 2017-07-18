@@ -13,7 +13,8 @@ from DigiNehruPy.settings import (EMAIL_HOST, EMAIL_HOST_USER,
                                   AWS_SECRET_ACCESS_KEY,
                                   AWS_STORAGE_BUCKET_NAME,
                                   REGION_HOST)
-from DigiNehruPy.server_config import PROJECT_PATH, S3_BUCKET
+from DigiNehruPy.server_config import PROJECT_PATH
+from DigiNehruPy.server_config import  S3_BUCKET
 from boto.s3.key import Key
 from boto.s3.connection import S3Connection
 from tasks import add
@@ -110,7 +111,6 @@ class StudentSignUp(View):
         add.apply_async(args=[])
 
         st = None
-
         try:
             st = Students.objects.get(roll=roll)
         except:
@@ -118,7 +118,6 @@ class StudentSignUp(View):
 
         if st and not st.status:
             self.update(data, st)
-
         try:
             if not st:
                 print "in generate image url"
@@ -140,8 +139,7 @@ class StudentSignUp(View):
             self.response['res_str'] = "Data added"
             return send_200(self.response)
         except Exception as e:
-            print e
-            self.response['res_str'] = "Data not added"
+            self.response['res_str'] = str(e)
             return send_400(self.response)
 
 

@@ -1,9 +1,7 @@
 import os
-
-PROJECT_PATH = os.path.abspath(os.path.join(
-    os.path.dirname(__name__), '..')) + '/'
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+from settings import BASE_DIR
 SERVER_BUCKET = "diginehru"
+PROJECT_PATH = os.path.abspath(os.path.join(BASE_DIR, '..')) + '/'
 # SERVER_BUCKET = os.environ['SERVER_BUCKET']
 S3_BUCKET_URL = 'https://s3.ap-south-1.amazonaws.com/'
 S3_BUCKET = S3_BUCKET_URL + SERVER_BUCKET + '/'
