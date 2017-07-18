@@ -90,6 +90,9 @@ DATABASES = {
         'PORT': '3306',
     }
 }
+
+AWS_ACCESS_KEY_ID = "AKIAIB5M56ROMNXWYSYQ"
+AWS_SECRET_ACCESS_KEY = "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"
 AWS_STORAGE_BUCKET_NAME = "diginehru"
 REGION_HOST = "s3.ap-south-1.amazonaws.com"
 
