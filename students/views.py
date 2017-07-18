@@ -98,8 +98,6 @@ class StudentSignUp(View):
         st.save()
 
     def post(self, request, *args, **kwargs):
-        import ipdb
-        ipdb.set_trace()
         data = request.POST
         file = request.FILES
         name = data['name']
