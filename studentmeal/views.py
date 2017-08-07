@@ -61,16 +61,12 @@ class StudentMenuEntry(View):
         roll = data['roll']
         meals_opted = []
         # eating_on = data['date']
-        import ipdb
-        ipdb.set_trace()
-        day = data['day']
+        eating_on = data['day']
 
-        if day == 0:
-            day = datetime.now(pytz.utc).weekday()
+        if eating_on == 0:
+            eating_on = datetime.now(pytz.utc).weekday()
         else:
-            day = (datetime.now(pytz.utc) + timedelta(1)).weekday()
-
-        eating_on = day
+            eating_on = (datetime.now(pytz.utc) + timedelta(1)).weekday()
 
         if data['breakfast']:
             meal[BREAKFAST]['vn'] = data['breakfast_vn']
@@ -159,3 +155,39 @@ class StudentMealTaken():
 
         self.response['res_str'] = "You are good to get your food!"
         return send_200(self.response)
+
+
+class MealCount():
+
+    def __init__(self):
+        self.response = init_response()
+
+    def post(self, request, *args, **kwargs):
+        data = request.POST
+        roll = data['roll']
+        time = data['time']
+        # for present day entry
+        eating_on = datetime.now(pytz.utc).weekday()
+
+        try:
+            roll = Students.objects.get(roll=roll)
+            try:
+                eat = mealcount.objects.get(student_roll=roll,
+                                            eating_on=eating_on)
+            except:
+                eat = None
+
+            if eat:
+                eat.meals_taken = time
+                eat.save()
+                self.response['res_str'] = "Data added"
+                return send_200(self.response)
+            else:
+                eating.objects.create(student=roll, eating_on=eating_on,
+                                      meals_taken=time)
+                self.response['res_str'] = "Data added"
+                return send_200(self.response)
+        except Exception as e:
+            print e
+            self.response['res_str'] = "Data not added"
+            return send_400(self.response)
