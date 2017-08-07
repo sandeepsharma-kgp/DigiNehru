@@ -6,7 +6,7 @@ from django.views.generic import ListView, DetailView, TemplateView, View
 from django.http.response import JsonResponse
 from django.core.mail import EmailMultiAlternatives
 from food.constants import BREAKFAST, LUNCH, SNACKS, DINNER
-from .models import eating
+from .models import eating, mealcount
 from datetime import datetime, timedelta
 import pytz
 from students.models import Students
@@ -88,7 +88,7 @@ class StudentMenuEntry(View):
         try:
             roll = Students.objects.get(roll=roll)
             try:
-                eat = eating.objects.get(student_roll=roll,
+                eat = eating.objects.get(student=roll,
                                          eating_on=eating_on)
             except:
                 eat = None
@@ -157,33 +157,37 @@ class StudentMealTaken():
         return send_200(self.response)
 
 
-class MealCount():
+class MealCount(View):
 
     def __init__(self):
         self.response = init_response()
 
     def post(self, request, *args, **kwargs):
+        import ipdb;ipdb.set_trace()
         data = request.POST
         roll = data['roll']
         time = data['time']
         # for present day entry
-        eating_on = datetime.now(pytz.utc).weekday()
+        eating_on = datetime.now(pytz.utc).date()
 
         try:
             roll = Students.objects.get(roll=roll)
             try:
-                eat = mealcount.objects.get(student_roll=roll,
+                eat = mealcount.objects.get(student=roll,
                                             eating_on=eating_on)
             except:
                 eat = None
 
             if eat:
-                eat.meals_taken = time
+                if time in eat.meals_taken:
+                    self.response['res_str'] = "Meal Taken"
+                    return send_400(self.response)
+                eat.meals_taken.append(time)
                 eat.save()
                 self.response['res_str'] = "Data added"
                 return send_200(self.response)
             else:
-                eating.objects.create(student=roll, eating_on=eating_on,
+                mealcount.objects.create(student=roll, eating_on=eating_on,
                                       meals_taken=time)
                 self.response['res_str'] = "Data added"
                 return send_200(self.response)
