@@ -163,7 +163,6 @@ class MealCount(View):
         self.response = init_response()
 
     def post(self, request, *args, **kwargs):
-        import ipdb;ipdb.set_trace()
         data = request.POST
         roll = data['roll']
         time = data['time']
@@ -184,14 +183,14 @@ class MealCount(View):
                     return send_400(self.response)
                 eat.meals_taken.append(time)
                 eat.save()
-                self.response['res_str'] = "Data added"
+                self.response['res_str'] = "You can take your meal"
                 return send_200(self.response)
             else:
                 mealcount.objects.create(student=roll, eating_on=eating_on,
-                                      meals_taken=time)
-                self.response['res_str'] = "Data added"
+                                         meals_taken=time)
+                self.response['res_str'] = "You can take your meal"
                 return send_200(self.response)
         except Exception as e:
             print e
-            self.response['res_str'] = "Data not added"
+            self.response['res_str'] = "Invalid Detail"
             return send_400(self.response)

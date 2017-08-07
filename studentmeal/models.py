@@ -62,5 +62,5 @@ class mealcount(models.Model):
             if field.many_to_one:
                 st = getattr(self, field.name)
                 data[field.name] = [st.name, st.roll]
-        # here goes properties
+
         return data
