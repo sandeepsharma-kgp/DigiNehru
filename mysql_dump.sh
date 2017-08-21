@@ -1,4 +1,3 @@
-
 now=$(date +'%Y-%m-%d')
 yesterday=$(date  -d "1 day ago" +'%Y-%m-%d')
 file_name="$now.sql"
