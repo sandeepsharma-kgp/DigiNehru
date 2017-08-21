@@ -164,13 +164,17 @@ class MealCount(View):
 
     def post(self, request, *args, **kwargs):
         data = request.POST
-        roll = data['roll']
+        id_ = data['id']
         time = data['time']
+        vn_choice = data['vn']
+        vn = {}
+        vn[time] = vn_choice 
+
         # for present day entry
         eating_on = datetime.now(pytz.utc).date()
-
+        import pdb; pdb.set_trace()
         try:
-            roll = Students.objects.get(roll=roll)
+            roll = Students.objects.get(token=id_)
             try:
                 eat = mealcount.objects.get(student=roll,
                                             eating_on=eating_on)
@@ -182,12 +186,13 @@ class MealCount(View):
                     self.response['res_str'] = "Meal Taken"
                     return send_400(self.response)
                 eat.meals_taken.append(time)
+                eat.vn[time] = vn_choice
                 eat.save()
                 self.response['res_str'] = "You can take your meal"
                 return send_200(self.response)
             else:
                 mealcount.objects.create(student=roll, eating_on=eating_on,
-                                         meals_taken=time)
+                                         meals_taken=time,vn=vn)
                 self.response['res_str'] = "You can take your meal"
                 return send_200(self.response)
         except Exception as e:
