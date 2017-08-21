@@ -45,19 +45,3 @@ for s in st:
             # send_email()
             print e
 print "Done"
-
-from_email = EMAIL_HOST_USER
-subject = "Your Token"
-to_email = "sandeepsharma.iit@gmail.com"
-to = [to_email]
-email_text = "token"
-message_arr = []
-msg = EmailMultiAlternatives(
-    subject, email_text, from_email, to)
-message_arr.append(msg)
-try:
-    connection.open()
-    connection.send_messages(message_arr)
-    connection.close()
-except Exception as e:
-    print e
