@@ -35,6 +35,7 @@ class Students(Base):
 
     class Meta:
         verbose_name_plural = 'Students'
+        unique_together = ('roll', 'token')
 
     def __unicode__(self):
         return str(self.name) + ' - ' + str(self.roll)
