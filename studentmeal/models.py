@@ -42,7 +42,6 @@ class eating(models.Model):
 
 class mealcount(models.Model):
     student = models.ForeignKey(Students, on_delete=models.CASCADE)
-    vn = JSONField()
     eating_on = models.DateField()
     meals_taken = MultiSelectField(
         choices=TIME_CHOICES, max_choices=4, default=list())
