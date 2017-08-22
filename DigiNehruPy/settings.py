@@ -25,7 +25,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 CORS_ORIGIN_ALLOW_ALL = True
-
+CORS_ORIGIN_WHITELIST = (
+    '13.126.109.166',
+)
 # Application definition
 
 INSTALLED_APPS = [
@@ -48,7 +50,7 @@ MIDDLEWARE = [
 	'corsheaders.middleware.CorsMiddleware',
 	'django.middleware.common.CommonMiddleware',
 	'django.middleware.csrf.CsrfViewMiddleware',
-	'DigiNehruPy.middleware.corsMiddleware',
+	# 'DigiNehruPy.middleware.corsMiddleware',
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
 	'django.middleware.clickjacking.XFrameOptionsMiddleware',
