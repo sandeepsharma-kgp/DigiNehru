@@ -172,7 +172,6 @@ class MealCount(View):
 
         # for present day entry
         eating_on = datetime.now(pytz.utc).date()
-        import pdb; pdb.set_trace()
         try:
             roll = Students.objects.get(token=id_)
             try:
