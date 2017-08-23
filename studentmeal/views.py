@@ -139,6 +139,7 @@ class StudentMealTaken():
         roll = data['roll']
         dated = data['dated']
         time = data['time']
+
         try:
             eat = eating.objects.filter(eating_on=dated, student=roll)
         except:
@@ -169,7 +170,9 @@ class MealCount(View):
         vn_choice = data['vn']
         vn = {}
         vn[time] = vn_choice 
-
+        if time is not in ["0","1","2","3"]:
+            self.response['res_str'] = "You are late! Mess is closed!!"
+            return send_400(self.response)
         # for present day entry
         eating_on = datetime.now(pytz.utc).date()
         try:

@@ -14,7 +14,7 @@ from DigiNehruPy.settings import (EMAIL_HOST, EMAIL_HOST_USER,
                                   AWS_STORAGE_BUCKET_NAME,
                                   REGION_HOST)
 from DigiNehruPy.server_config import PROJECT_PATH
-from DigiNehruPy.server_config import  S3_BUCKET
+from DigiNehruPy.server_config import S3_BUCKET
 from boto.s3.key import Key
 from boto.s3.connection import S3Connection
 from tasks import add
