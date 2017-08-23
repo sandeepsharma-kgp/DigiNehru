@@ -170,7 +170,7 @@ class MealCount(View):
         vn_choice = data['vn']
         vn = {}
         vn[time] = vn_choice 
-        if time is not in ["0","1","2","3"]:
+        if time not in ["0","1","2","3"]:
             self.response['res_str'] = "You are late! Mess is closed!!"
             return send_400(self.response)
         # for present day entry
