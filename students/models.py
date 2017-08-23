@@ -38,7 +38,7 @@ class Students(Base):
         unique_together = ('roll', 'token')
 
     def __unicode__(self):
-        return str(self.name) + ' - ' + str(self.roll)
+        return str(self.name) + ' - ' + str(self.roll)+ ' - ' + str(self.created_on.date())
 
     def serializer(self):
         data = {}
