@@ -107,8 +107,8 @@ class StudentSignUp(View):
         email = data['email']
         mobile = data['mobile']
         password = data['password']
-        profile = file['profile']
-        add.apply_async(args=[])
+        # profile = file['profile']
+        # add.apply_async(args=[])
 
         st = None
         try:
@@ -120,20 +120,24 @@ class StudentSignUp(View):
             self.update(data, st)
         try:
             if not st:
-                print "in generate image url"
-                if not os.path.exists(IMAGE_PATH):
-                    os.makedirs(IMAGE_PATH)
-                    os.chmod(IMAGE_PATH, 0777)
-                image_src = IMAGE_PATH + roll + '.png'
-                f = open(image_src, 'w')
-                f.write(profile.read())
-                f.close()
-                s3_path = 'profileimages/' + roll
-                s3_link = copy_contents_to_s3_public(s3_path, image_src)
+                # # print "in generate image url"
+                # if not os.path.exists(IMAGE_PATH):
+                #     os.makedirs(IMAGE_PATH)
+                #     os.chmod(IMAGE_PATH, 0777)
+                # image_src = IMAGE_PATH + roll + '.png'
+                # f = open(image_src, 'w')
+                # f.write(profile.read())
+                # f.close()
+                # s3_path = 'profileimages/' + roll
+                # s3_link = copy_contents_to_s3_public(s3_path, image_src)
+                # Students.objects.create(
+                #     name=name, roll=roll, room=room,
+                #     email=email, mobile=mobile,
+                #     password=password, profile=s3_link)
                 Students.objects.create(
                     name=name, roll=roll, room=room,
                     email=email, mobile=mobile,
-                    password=password, profile=s3_link)
+                    password=password)
             else:
                 raise Exception('Student already registered')
             self.response['res_str'] = "Data added"
