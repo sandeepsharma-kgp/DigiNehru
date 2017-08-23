@@ -162,8 +162,8 @@ class StudentLogin(View):
         except:
             st = None
         if st:
-            st.token = uuid.uuid1()
-            st.save()
+            # st.token = uuid.uuid1()
+            # st.save()
             self.response['res_str'] = "student-detail"
             self.response['res_data'] = st.serializer()
             return send_200(self.response)
