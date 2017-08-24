@@ -19,6 +19,7 @@ from boto.s3.key import Key
 from boto.s3.connection import S3Connection
 from tasks import add
 import hashlib
+import json
 IMAGE_PATH = PROJECT_PATH + 'PROFILE_IMAGES/'
 # Create your views here.
 
