@@ -89,7 +89,7 @@ class StudentSignUp(View):
         email = data['email']
         mobile = data['mobile']
         password = data['password']
-        password = hashlib.sha256(password)
+        password = hashlib.sha256(password).hexdigest()
 
         st.name = name
         st.roll = roll
@@ -109,7 +109,7 @@ class StudentSignUp(View):
         email = data['email']
         mobile = data['mobile']
         password = data['password']
-        password = hashlib.sha256(password)
+        password = hashlib.sha256(password).hexdigest()
         # profile = file['profile']
         # add.apply_async(args=[])
 
@@ -159,7 +159,7 @@ class StudentLogin(View):
         data = request.POST
         roll = data['roll']
         password = data['password']
-        password = hashlib.sha256(password)
+        password = hashlib.sha256(password).hexdigest()
 
         try:
             st = Students.objects.get(roll=roll, password=password)
