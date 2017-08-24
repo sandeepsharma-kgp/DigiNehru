@@ -163,11 +163,12 @@ class StudentSignUp(View):
                     email=email, mobile=mobile,
                     password=password)
             else:
-                raise Exception('Student already registered')
+                self.response['res_str'] = "Student already registered"
+                return send_400(self.response)
             self.response['res_str'] = "You're Registered!!"
             return send_200(self.response)
         except Exception as e:
-            self.response['res_str'] = str(e)
+            self.response['res_str'] = "Something went wrong!"
             import traceback
             error_msg = {}
             error_msg["TRACEBACK"] = str(traceback.format_exc())
@@ -199,12 +200,12 @@ class StudentLogin(View):
             return send_200(self.response)
         else:
             self.response['res_str'] = "Not Registered or Invalid Username/Password"
-            import traceback
-            error_msg = {}
-            error_msg["TRACEBACK"] = traceback.format_exc()
-            error_msg["ID"] = roll
-            error_msg = json.dumps(error_msg)
-            send_error_email(error_msg)
+            # import traceback
+            # error_msg = {}
+            # error_msg["TRACEBACK"] = traceback.format_exc()
+            # error_msg["ID"] = roll
+            # error_msg = json.dumps(error_msg)
+            # send_error_email(error_msg)
             return send_400(self.response)
 
 
