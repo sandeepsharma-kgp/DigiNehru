@@ -143,7 +143,7 @@ class StudentSignUp(View):
                     password=password)
             else:
                 raise Exception('Student already registered')
-            self.response['res_str'] = "Data added"
+            self.response['res_str'] = "You're Registered!!"
             return send_200(self.response)
         except Exception as e:
             self.response['res_str'] = str(e)
@@ -172,7 +172,7 @@ class StudentLogin(View):
             self.response['res_data'] = st.serializer()
             return send_200(self.response)
         else:
-            self.response['res_str'] = "student not exist"
+            self.response['res_str'] = "Not Registered or Invalid Username/Password"
             return send_400(self.response)
 
 
