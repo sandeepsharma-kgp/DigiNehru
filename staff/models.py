@@ -55,7 +55,7 @@ class Staff(Base):
     email = models.EmailField(max_length=254)
     mobile = models.CharField(max_length=12)
     password = models.CharField(max_length=200)
-    role = models.ForeignKey(Role, default=1)
+    role = models.ForeignKey(Role, default=1, on_delete=models.CASCADE)
     profile = models.URLField(max_length=1000, blank=True, null=True)
 
     class Meta:
