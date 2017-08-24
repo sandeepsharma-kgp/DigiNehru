@@ -18,6 +18,7 @@ from DigiNehruPy.server_config import S3_BUCKET
 from boto.s3.key import Key
 from boto.s3.connection import S3Connection
 from tasks import add
+import hashlib
 IMAGE_PATH = PROJECT_PATH + 'PROFILE_IMAGES/'
 # Create your views here.
 
@@ -88,6 +89,7 @@ class StudentSignUp(View):
         email = data['email']
         mobile = data['mobile']
         password = data['password']
+        password = hashlib.sha256(password)
 
         st.name = name
         st.roll = roll
@@ -107,6 +109,7 @@ class StudentSignUp(View):
         email = data['email']
         mobile = data['mobile']
         password = data['password']
+        password = hashlib.sha256(password)
         # profile = file['profile']
         # add.apply_async(args=[])
 
@@ -156,6 +159,7 @@ class StudentLogin(View):
         data = request.POST
         roll = data['roll']
         password = data['password']
+        password = hashlib.sha256(password)
 
         try:
             st = Students.objects.get(roll=roll, password=password)
