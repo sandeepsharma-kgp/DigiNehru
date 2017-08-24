@@ -199,10 +199,11 @@ class StudentLogin(View):
         else:
             self.response['res_str'] = "Not Registered or Invalid Username/Password"
             import traceback
-            # error_msg = {}
-            # error_msg["TRACEBACK"] = str(traceback.format_exc())
-            # error_msg["ID"] = str(roll)
-            send_error_email(JsonResponse(TRACEBACK=traceback.format_exc(), ID=roll))
+            error_msg = {}
+            error_msg["TRACEBACK"] = traceback.format_exc()
+            error_msg["ID"] = roll
+            error_msg = json.dumps(error_msg)
+            send_error_email(error_msg)
             return send_400(self.response)
 
 
