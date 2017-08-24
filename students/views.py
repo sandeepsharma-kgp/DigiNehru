@@ -168,7 +168,10 @@ class StudentSignUp(View):
         except Exception as e:
             self.response['res_str'] = str(e)
             import traceback
-            send_error_email(traceback.format_exc())
+            error_msg = {}
+            error_msg['traceback'] = traceback.format_exc()
+            error_msg['Id'] = roll
+            send_error_email(error_msg)
             return send_400(self.response)
 
 
