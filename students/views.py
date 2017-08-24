@@ -165,7 +165,7 @@ class StudentSignUp(View):
             else:
                 self.response['res_str'] = "Student already registered"
                 return send_400(self.response)
-            self.response['res_str'] = "You're Registered!!"
+            self.response['res_str'] = "Registration Done!!"
             return send_200(self.response)
         except Exception as e:
             self.response['res_str'] = "Something went wrong!"
