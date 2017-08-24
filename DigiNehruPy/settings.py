@@ -25,9 +25,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 CORS_ORIGIN_ALLOW_ALL = True
-# CORS_ORIGIN_WHITELIST = (
-#     '13.126.109.166',
-# )
+CORS_ORIGIN_WHITELIST = (
+    '13.126.109.166',
+)
 # Application definition
 
 INSTALLED_APPS = [
