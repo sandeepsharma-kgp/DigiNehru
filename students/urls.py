@@ -4,6 +4,10 @@ from . import views
 
 
 urlpatterns = [
+    url(r'^$', views.login),
+    url(r'^(?P<roll>[\w{}.-]{1,9})/$', views.login_id),
+    url(r'^detail/(?P<roll>[\w{}.-]{1,9})/$',
+        csrf_exempt(views.StudentLogin.as_view()), name='student-login')	,
     url(r'^studentregister/$', csrf_exempt(views.StudentSignUp.as_view()),
         name='student-registration'),
     url(r'^studentlogin/$',

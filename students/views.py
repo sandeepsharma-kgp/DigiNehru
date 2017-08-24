@@ -18,9 +18,23 @@ from DigiNehruPy.server_config import S3_BUCKET
 from boto.s3.key import Key
 from boto.s3.connection import S3Connection
 from tasks import add
+from django.shortcuts import render
 IMAGE_PATH = PROJECT_PATH + 'PROFILE_IMAGES/'
+
 # Create your views here.
 
+
+def login(request):
+    return render(request, 'student/profile.html')
+
+
+def login_id(request, roll):
+    student = Students.objects.get(roll=roll)
+    return render(request, 'student/profile.html',{'student': student})
+
+def login_detail(request, roll):
+    student = Students.objects.get(roll=roll)
+    return render(request, 'student/profile.html',{'student': student})
 
 def send_200(data):
     return JsonResponse(data=data, status=200)
@@ -170,6 +184,12 @@ class StudentLogin(View):
         else:
             self.response['res_str'] = "student not exist"
             return send_400(self.response)
+
+    def get(self, request, *args, **kwargs):
+        data = request.GET
+        import ipdb;ipdb.set_trace()
+
+        return Students.objects.get(roll='13MI31025')
 
 
 class ForgotPassword(View):
