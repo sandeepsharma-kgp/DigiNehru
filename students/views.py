@@ -41,6 +41,26 @@ def init_response(res_str=None, data=None):
         response["res_data"] = data
     return response
 
+def send_error_email(error_msg):
+    connection = get_connection(username=EMAIL_HOST_USER,
+                                password=EMAIL_HOST_PASSWORD,
+                                fail_silently=False)
+
+    from_email = "diginehru@gmail.com"
+    subject = "Error"
+    to_email = from_email
+    to = [to_email]
+    email_text = error_msg
+    message_arr = []
+    msg = EmailMultiAlternatives(
+        subject, email_text, from_email, to)
+    message_arr.append(msg)
+    try:
+        connection.open()
+        connection.send_messages(message_arr)
+        connection.close()
+    except Exception as e:
+        print e
 
 def send_email(email, password):
     connection = get_connection(username=EMAIL_HOST_USER,
@@ -147,6 +167,8 @@ class StudentSignUp(View):
             return send_200(self.response)
         except Exception as e:
             self.response['res_str'] = str(e)
+            import traceback
+            send_error_email(traceback.format_exc())
             return send_400(self.response)
 
 
