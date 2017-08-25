@@ -3,12 +3,6 @@ from students.models import Students
 
 from datetime import datetime
 from django.utils.crypto import get_random_string
-print "In"
-import logging
-logging.basicConfig(filename='example.log',level=logging.DEBUG)
-logging.debug('This message should go to the log file')
-logging.warning('Watch out!')  # will print a message to the console
-logging.info('I told you so')
 
 
 def send_email(msg, subject):
@@ -57,6 +51,5 @@ for s in st:
             error_msg["ID"] = s.roll
             error_msg = json.dumps(error_msg)
             send_email(error_msg, "Error-Token")
-print "Down"
 
 send_email("Token Distributed Successfully!!", "Success-Token")
