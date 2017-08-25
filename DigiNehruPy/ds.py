@@ -1,6 +1,5 @@
 
 from students.models import Students
-
 from datetime import datetime
 from django.utils.crypto import get_random_string
 
@@ -50,6 +49,6 @@ for s in st:
             error_msg["TRACEBACK"] = traceback.format_exc()
             error_msg["ID"] = s.roll
             error_msg = json.dumps(error_msg)
-            send_email(error_msg, "Error-Token")
+            send_email(error_msg, "Token-Error")
 
-send_email("Token Distributed Successfully!!", "Success-Token")
+send_email("Token Distributed Successfully!!", "Token-Success")
