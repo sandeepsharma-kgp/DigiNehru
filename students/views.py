@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 import os
 from django.shortcuts import render
 from .models import Students
+from .constants import ACTIVE, INACTIVE
 from django.views.generic import ListView, DetailView, TemplateView, View
 from django.http.response import JsonResponse
 from django.core.mail import EmailMultiAlternatives, get_connection
@@ -42,6 +43,7 @@ def init_response(res_str=None, data=None):
         response["res_data"] = data
     return response
 
+
 def send_error_email(error_msg):
     connection = get_connection(username=EMAIL_HOST_USER,
                                 password=EMAIL_HOST_PASSWORD,
@@ -62,6 +64,7 @@ def send_error_email(error_msg):
         connection.close()
     except Exception as e:
         print e
+
 
 def send_email(email, password):
     connection = get_connection(username=EMAIL_HOST_USER,
@@ -193,7 +196,12 @@ class StudentLogin(View):
             st = Students.objects.get(roll=roll, password=password)
         except:
             st = None
+
         if st:
+            if st.status == INACTIVE:
+                self.response['res_str'] = "Account has been purged!!\
+                                            \nContact: diginehru@gmail.com"
+                return send_400(self.response)
             # st.token = uuid.uuid1()
             # st.save()
             self.response['res_str'] = "student-detail"

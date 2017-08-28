@@ -3,12 +3,11 @@ from __future__ import unicode_literals
 
 from django.db import models
 from food.utils import get_all_fields
+from .constants import ACTIVE, INACTIVE
 # Create your models here.
 
 
 class Base(models.Model):
-    ACTIVE = 0
-    INACTIVE = 1
 
     STATUS_CHOICE = ((ACTIVE, 'Active'),
                      (INACTIVE, 'Inactive')
@@ -38,7 +37,7 @@ class Students(Base):
         unique_together = ('roll', 'token')
 
     def __unicode__(self):
-        return str(self.name) + ' - ' + str(self.roll)+ ' - ' + str(self.created_on.date())
+        return str(self.name) + ' - ' + str(self.roll) + ' - ' + str(self.created_on.date())
 
     def serializer(self):
         data = {}

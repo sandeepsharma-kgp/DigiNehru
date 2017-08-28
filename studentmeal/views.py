@@ -176,16 +176,20 @@ class MealCount(View):
         # for present day entry
         eating_on = datetime.now(pytz.utc).date()
         try:
-            roll = Students.objects.get(token=id_)
+            st = Students.objects.get(token=id_)
+            if st.status == INACTIVE:
+                self.response['res_str'] = "Account has been purged!!\
+                                            \nContact: diginehru@gmail.com"
+                return send_400(self.response)
             try:
-                eat = mealcount.objects.get(student=roll,
+                eat = mealcount.objects.get(student=st,
                                             eating_on=eating_on)
             except:
                 eat = None
 
             if eat:
                 if time in eat.meals_taken:
-                    self.response['res_str'] = "Meal Taken"
+                    self.response['res_str'] = "Meal already taken!!"
                     return send_400(self.response)
                 eat.meals_taken.append(time)
                 eat.vn[time] = vn_choice
@@ -193,7 +197,7 @@ class MealCount(View):
                 self.response['res_str'] = "You can take your meal"
                 return send_200(self.response)
             else:
-                mealcount.objects.create(student=roll, eating_on=eating_on,
+                mealcount.objects.create(student=st, eating_on=eating_on,
                                          meals_taken=time,vn=vn)
                 self.response['res_str'] = "You can take your meal"
                 return send_200(self.response)
