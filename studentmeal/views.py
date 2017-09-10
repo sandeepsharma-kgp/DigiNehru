@@ -170,8 +170,11 @@ class MealCount(View):
             self.response['res_str'] = "Wrong Device"
             return send_400(self.response)
         id_ = data['id']
+        import ipdb
+        ipdb.set_trace()
         # time = data['time']
-        time = "3"
+        time = "-1"
+        dated = datetime.now(pytz.utc)
         vn_choice = data['vn']
         vn = {}
         vn[time] = vn_choice
