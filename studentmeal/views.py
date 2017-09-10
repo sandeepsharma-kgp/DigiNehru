@@ -171,9 +171,6 @@ class MealCount(View):
             self.response['res_str'] = "Wrong Device"
             return send_400(self.response)
         id_ = data['id']
-        import ipdb
-        ipdb.set_trace()
-        # time = data['time']
         time = "-1"
         dated = datetime.now(pytz.utc)
         hr = datetime.strptime(str(dated.astimezone(tz.gettz('Asia/Kolkata'))),
