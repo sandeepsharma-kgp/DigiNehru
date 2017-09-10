@@ -137,6 +137,9 @@ class StudentMealTaken():
 
     def post(self, request, *args, **kwargs):
         data = request.POST
+        if data['d_id'] != 'd03631c7040d29dc':
+            self.response['res_str'] = "Wrong Device"
+            return send_400(self.response)
         roll = data['roll']
         dated = data['dated']
         time = data['time']
@@ -170,8 +173,8 @@ class MealCount(View):
         time = data['time']
         vn_choice = data['vn']
         vn = {}
-        vn[time] = vn_choice 
-        if time not in ["0","1","2","3"]:
+        vn[time] = vn_choice
+        if time not in ["0", "1", "2", "3"]:
             self.response['res_str'] = "You are late! Mess is closed!!"
             return send_400(self.response)
         # for present day entry
@@ -199,7 +202,7 @@ class MealCount(View):
                 return send_200(self.response)
             else:
                 mealcount.objects.create(student=st, eating_on=eating_on,
-                                         meals_taken=time,vn=vn)
+                                         meals_taken=time, vn=vn)
                 self.response['res_str'] = "You can take your meal"
                 return send_200(self.response)
         except Exception as e:
