@@ -177,7 +177,7 @@ class MealCount(View):
         time = "-1"
         dated = datetime.now(pytz.utc)
         hr = datetime.strptime(str(dated.astimezone(tz.gettz('Asia/Kolkata'))),
-                               '%Y-%m-%d%H:%M:%S.%f+05:30')
+                               '%Y-%m-%d %H:%M:%S.%f+05:30')
         hrs = hr.hour
         if hrs <= 10 and hrs >= 7:
             time = "0"
