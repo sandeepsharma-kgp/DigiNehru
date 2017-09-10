@@ -137,9 +137,6 @@ class StudentMealTaken():
 
     def post(self, request, *args, **kwargs):
         data = request.POST
-        if data['d_id'] != 'd03631c7040d29dc':
-            self.response['res_str'] = "Wrong Device"
-            return send_400(self.response)
         roll = data['roll']
         dated = data['dated']
         time = data['time']
@@ -169,8 +166,12 @@ class MealCount(View):
 
     def post(self, request, *args, **kwargs):
         data = request.POST
+        if data['d_id'] != 'd03631c7040d29dc':
+            self.response['res_str'] = "Wrong Device"
+            return send_400(self.response)
         id_ = data['id']
-        time = data['time']
+        # time = data['time']
+        time = "3"
         vn_choice = data['vn']
         vn = {}
         vn[time] = vn_choice
