@@ -175,6 +175,17 @@ class MealCount(View):
         # time = data['time']
         time = "-1"
         dated = datetime.now(pytz.utc)
+        hr = datetime.strptime(str(dated.astimezone(tz.gettz('Asia/Kolkata'))),
+                               '%Y - %m - %d % H: % M: % S. % f + 05: 30')
+        hrs = hr.hour
+        if hrs <= 10 and hrs >= 7:
+            time = "0"
+        elif hrs >= 12 and hrs <= 14:
+            time = "1"
+        elif hrs >= 16 and hrs <= 18:
+            time = "2"
+        elif hrs >= 19 and hrs <= 21:
+            time = "3"
         vn_choice = data['vn']
         vn = {}
         vn[time] = vn_choice
