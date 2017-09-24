@@ -9,5 +9,5 @@ urlpatterns = [
     url(r'^studentlogin/$',
         csrf_exempt(views.StudentLogin.as_view()), name='student-login'),
     url(r'^studentforgot/$',
-        views.ForgotPassword.as_view(), name='student-forgot'),
+        csrf_exempt(views.ForgotPassword.as_view()), name='student-forgot'),
 ]
