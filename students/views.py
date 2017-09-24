@@ -234,12 +234,41 @@ class ForgotPassword(View):
             return send_400(self.response)
 
         password = get_random_string(length=6, allowed_chars='1234567890ABCDEF')
-        st.password = password
+        save_password = hashlib.md5(password).hexdigest()
+        save_password = hashlib.sha256(save_passworde).hexdigest()
+        st.password = save_password
         st.save()
 
         email = st.email
-
-        send_email(email, password)
+        try:
+            send_email(email, password)
+        except:
+            import traceback
+            error_msg = {}
+            error_msg["TRACEBACK"] = traceback.format_exc()
+            error_msg["ID"] = s.roll
+            error_msg = json.dumps(error_msg)
+            send_error_email(error_msg, "Password-Forgot-Error")
 
         self.response['res_str'] = "Password sent to your registered e-mail id!"
+        return send_200(self.response)
+
+    def post(self, request, *args, **kwargs):
+        data = request.GET
+        roll = data['roll']
+        prevpass = data['prevpass']
+        prevpass = hashlib.sha256(prevpass).hexdigest()
+        password = data['password']
+        password = hashlib.sha256(password).hexdigest()
+
+        try:
+            st = Students.objects.get(roll=roll, password=prevpass)
+        except:
+            self.response['res_str'] = "Not Registered or Invalid Roll No./Password"
+            return send_400(self.response)
+
+        st.password = password
+        st.save()
+
+        self.response['res_str'] = "Your password is changed!"
         return send_200(self.response)
