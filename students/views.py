@@ -254,7 +254,7 @@ class ForgotPassword(View):
         return send_200(self.response)
 
     def post(self, request, *args, **kwargs):
-        data = request.GET
+        data = request.POST
         roll = data['roll']
         prevpass = data['prevpass']
         prevpass = hashlib.sha256(prevpass).hexdigest()
