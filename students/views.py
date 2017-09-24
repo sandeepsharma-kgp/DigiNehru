@@ -235,7 +235,7 @@ class ForgotPassword(View):
 
         password = get_random_string(length=6, allowed_chars='1234567890ABCDEF')
         save_password = hashlib.md5(password).hexdigest()
-        save_password = hashlib.sha256(save_passworde).hexdigest()
+        save_password = hashlib.sha256(save_password).hexdigest()
         st.password = save_password
         st.save()
 
