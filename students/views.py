@@ -7,7 +7,7 @@ from .constants import ACTIVE, INACTIVE
 from django.views.generic import ListView, DetailView, TemplateView, View
 from django.http.response import JsonResponse
 from django.core.mail import EmailMultiAlternatives, get_connection
-import uuid
+from django.utils.crypto import get_random_string
 from DigiNehruPy.settings import (EMAIL_HOST, EMAIL_HOST_USER,
                                   EMAIL_HOST_PASSWORD,
                                   AWS_ACCESS_KEY_ID,
@@ -71,11 +71,12 @@ def send_email(email, password):
                                 password=EMAIL_HOST_PASSWORD,
                                 fail_silently=False)
 
-    from_email = "sandeepsharma.iit@gmail.in"
+    from_email = "diginehru@gmail.in"
     subject = "Change Password"
     to_email = email
     to = [to_email]
-    email_text = password
+    email_text = "Your password changed to: " + \
+        password + " \nUse this password to reset to new one."
     message_arr = []
     msg = EmailMultiAlternatives(
         subject, email_text, from_email, to)
@@ -208,7 +209,7 @@ class StudentLogin(View):
             self.response['res_data'] = st.serializer()
             return send_200(self.response)
         else:
-            self.response['res_str'] = "Not Registered or Invalid Username/Password"
+            self.response['res_str'] = "Not Registered or Invalid Roll No./Password"
             # import traceback
             # error_msg = {}
             # error_msg["TRACEBACK"] = traceback.format_exc()
@@ -226,15 +227,19 @@ class ForgotPassword(View):
     def get(self, request, *args, **kwargs):
         data = request.GET
         roll = data['roll']
+        try:
+            st = Students.objects.get(roll=roll)
+        except:
+            self.response['res_str'] = "Not Registered or Invalid Roll No."
+            return send_400(self.response)
 
-        st = Students.objects.get(roll=roll)
-        password = "123456"
+        password = get_random_string(length=6, allowed_chars='1234567890ABCDEF')
         st.password = password
         st.save()
 
-        email = "sandeep.sharma@happay.in"
+        email = st.email
 
         send_email(email, password)
 
-        self.response['res_str'] = "Link sent"
+        self.response['res_str'] = "Password sent to your registered e-mail id!"
         return send_200(self.response)
