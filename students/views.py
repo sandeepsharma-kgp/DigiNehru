@@ -66,13 +66,13 @@ def send_error_email(error_msg):
         print e
 
 
-def send_email(email, password):
+def send_email(email, password, roll):
     connection = get_connection(username=EMAIL_HOST_USER,
                                 password=EMAIL_HOST_PASSWORD,
                                 fail_silently=False)
 
     from_email = "diginehru@gmail.in"
-    subject = "Change Password"
+    subject = "Change Password" + roll
     to_email = email
     to = [to_email]
     email_text = "Your password changed to: " + \
@@ -85,8 +85,15 @@ def send_email(email, password):
         connection.open()
         connection.send_messages(message_arr)
         connection.close()
+        return True
     except Exception as e:
-        print e
+        import traceback
+        error_msg = {}
+        error_msg["TRACEBACK"] = traceback.format_exc()
+        error_msg["ID"] = roll
+        error_msg = json.dumps(error_msg)
+        send_error_email(error_msg, "Password-Forgot-Error")
+        return False
 
 
 def copy_contents_to_s3_public(s3_file_name, file_path):
@@ -208,7 +215,7 @@ class StudentLogin(View):
 
         if st:
             if st.status == INACTIVE:
-                self.response['res_str'] = "Account has been purged!!\
+                self.response['res_str'] = "Account has been purged or not activated!!\
                                             \nContact: diginehru@gmail.com"
                 return send_400(self.response)
             # st.token = uuid.uuid1()
@@ -238,7 +245,12 @@ class ForgotPassword(View):
         try:
             st = Students.objects.get(roll=roll)
         except:
-            self.response['res_str'] = "Not Registered or Invalid Roll No."
+            self.response['res_str'] = "You're not a Nehruite!!"
+            return send_400(self.response)
+
+        if not st.status:
+            self.response['res_str'] = "Account has been purged or not activated!!\
+                                            \nContact: diginehru@gmail.com"
             return send_400(self.response)
 
         password = get_random_string(length=6, allowed_chars='1234567890ABCDEF')
@@ -248,18 +260,13 @@ class ForgotPassword(View):
         st.save()
 
         email = st.email
-        try:
-            send_email(email, password)
-        except:
-            import traceback
-            error_msg = {}
-            error_msg["TRACEBACK"] = traceback.format_exc()
-            error_msg["ID"] = s.roll
-            error_msg = json.dumps(error_msg)
-            send_error_email(error_msg, "Password-Forgot-Error")
-
-        self.response['res_str'] = "Password sent to your registered e-mail id!"
-        return send_200(self.response)
+        if send_email(email, password, st.roll)
+            self.response['res_str'] = "Password sent to your registered e-mail id!"
+            return send_200(self.response)
+        else:
+            self.response['res_str'] = "Your email-id isn't correct!!\
+                                        \nContact: diginehru@gmail.com"
+            return send_400(self.response)
 
     def post(self, request, *args, **kwargs):
         data = request.POST
