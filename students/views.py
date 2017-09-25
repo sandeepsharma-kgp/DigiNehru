@@ -149,6 +149,9 @@ class StudentSignUp(View):
                 self.update(data, st)
                 self.response['res_str'] = "Registration Done!!"
                 return send_200(self.response)
+            elif not st:
+                self.response['res_str'] = "You're not a Nehruite!!"
+                return send_200(self.response)
             # will be uncommented once to make registration for any-one..
             # commenting here restricts on nehru residents ot get registered as in backend nehru residents will be saved
             # uncommenting twice will add feature to add photo of the user
