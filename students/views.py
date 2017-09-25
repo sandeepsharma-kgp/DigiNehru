@@ -260,7 +260,7 @@ class ForgotPassword(View):
         st.save()
 
         email = st.email
-        if send_email(email, password, st.roll)
+        if send_email(email, password, st.roll):
             self.response['res_str'] = "Password sent to your registered e-mail id!"
             return send_200(self.response)
         else:
