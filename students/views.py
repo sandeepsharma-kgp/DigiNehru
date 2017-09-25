@@ -72,7 +72,7 @@ def send_email(email, password, roll):
                                 fail_silently=False)
 
     from_email = "diginehru@gmail.in"
-    subject = "Change Password" + roll
+    subject = "Change Password " + roll
     to_email = email
     to = [to_email]
     email_text = "Your password changed to: " + \
