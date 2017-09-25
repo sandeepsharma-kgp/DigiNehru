@@ -166,7 +166,6 @@ class MealCount(View):
         self.response = init_response()
 
     def post(self, request, *args, **kwargs):
-        import ipdb;ipdb.set_trace()
         data = request.POST
         if data['d_id'] != '8b72b7475b2ba075':
             self.response['res_str'] = "Wrong Device"
