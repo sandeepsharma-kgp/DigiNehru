@@ -122,7 +122,7 @@ class StudentSignUp(View):
         st.email = email
         st.mobile = mobile
         st.password = password
-
+        st.status = ACTIVE
         st.save()
 
     def post(self, request, *args, **kwargs):
@@ -144,33 +144,38 @@ class StudentSignUp(View):
         except:
             pass
 
-        if st and not st.status:
-            self.update(data, st)
         try:
-            if not st:
-                # # print "in generate image url"
-                # if not os.path.exists(IMAGE_PATH):
-                #     os.makedirs(IMAGE_PATH)
-                #     os.chmod(IMAGE_PATH, 0777)
-                # image_src = IMAGE_PATH + roll + '.png'
-                # f = open(image_src, 'w')
-                # f.write(profile.read())
-                # f.close()
-                # s3_path = 'profileimages/' + roll
-                # s3_link = copy_contents_to_s3_public(s3_path, image_src)
-                # Students.objects.create(
-                #     name=name, roll=roll, room=room,
-                #     email=email, mobile=mobile,
-                #     password=password, profile=s3_link)
-                Students.objects.create(
-                    name=name, roll=roll, room=room,
-                    email=email, mobile=mobile,
-                    password=password)
-            else:
-                self.response['res_str'] = "Student already registered"
-                return send_400(self.response)
-            self.response['res_str'] = "Registration Done!!"
-            return send_200(self.response)
+            if st and not st.status:
+                self.update(data, st)
+                self.response['res_str'] = "Registration Done!!"
+                return send_200(self.response)
+            # will be uncommented once to make registration for any-one..
+            # commenting here restricts on nehru residents ot get registered as in backend nehru residents will be saved
+            # uncommenting twice will add feature to add photo of the user
+            # if not st:
+            #     # # print "in generate image url"
+            #     # if not os.path.exists(IMAGE_PATH):
+            #     #     os.makedirs(IMAGE_PATH)
+            #     #     os.chmod(IMAGE_PATH, 0777)
+            #     # image_src = IMAGE_PATH + roll + '.png'
+            #     # f = open(image_src, 'w')
+            #     # f.write(profile.read())
+            #     # f.close()
+            #     # s3_path = 'profileimages/' + roll
+            #     # s3_link = copy_contents_to_s3_public(s3_path, image_src)
+            #     # Students.objects.create(
+            #     #     name=name, roll=roll, room=room,
+            #     #     email=email, mobile=mobile,
+            #     #     password=password, profile=s3_link)
+            #     Students.objects.create(
+            #         name=name, roll=roll, room=room,
+            #         email=email, mobile=mobile,
+            #         password=password)
+            # else:
+            #     self.response['res_str'] = "Student already registered"
+            #     return send_400(self.response)
+            self.response['res_str'] = "Student already registered"
+            return send_400(self.response)
         except Exception as e:
             self.response['res_str'] = "Something went wrong!"
             import traceback

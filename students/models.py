@@ -23,12 +23,12 @@ class Base(models.Model):
 
 
 class Students(Base):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, blank=True, null=True)
     roll = models.CharField(max_length=20, primary_key=True)
-    room = models.CharField(max_length=10)
-    email = models.EmailField(max_length=254)
-    mobile = models.CharField(max_length=12)
-    password = models.CharField(max_length=200)
+    room = models.CharField(max_length=10, blank=True, null=True)
+    email = models.EmailField(max_length=254, blank=True, null=True)
+    mobile = models.CharField(max_length=12, blank=True, null=True)
+    password = models.CharField(max_length=200, blank=True, null=True)
     token = models.CharField(max_length=200, blank=True, null=True)
     profile = models.URLField(max_length=1000, blank=True, null=True)
 
