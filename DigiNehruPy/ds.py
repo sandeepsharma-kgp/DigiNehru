@@ -36,7 +36,7 @@ for s in st:
 for s in st:
     found = 1
     while found:
-        tk = get_random_string(length=6, allowed_chars='1234567890')
+        tk = get_random_string(length=4, allowed_chars='1234567890')
         try:
             Students.objects.get(token=tk)
         except Students.DoesNotExist:
