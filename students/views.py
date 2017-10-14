@@ -157,7 +157,7 @@ class StudentSignUp(View):
                 self.response['res_str'] = "Registration Done!!"
                 return send_200(self.response)
             elif not st:
-                self.response['res_str'] = "You're not a Nehruite!!"
+                self.response['res_str'] = "You're not in Roll-List.\nContact diginehru@gmail.com/+918159029529"
                 return send_200(self.response)
             # will be uncommented once to make registration for any-one..
             # commenting here restricts on nehru residents ot get registered as in backend nehru residents will be saved
