@@ -21,6 +21,7 @@ from boto.s3.connection import S3Connection
 from tasks import add
 import hashlib
 import json
+import urllib2
 IMAGE_PATH = PROJECT_PATH + 'PROFILE_IMAGES/'
 # Create your views here.
 
@@ -303,13 +304,18 @@ class StudentList(View):
         token = []
         count = 0
         for s in st:
-            roll.append(s.roll)
-            email.append(s.email)
-            token.append(s.token)
-            count += 1
+            roll = s.roll
+            email = s.email
+            token = s.token
+            count+=1
+            try:
+                urllib2.urlopen("https://pushmail.herokuapp.com/sendemail/?email="+email+"&roll="+roll+"&token="+token)
+                print count
+            except Exception as e:
+                print e
 
-        self.response['res_data']['count'] = count
-        self.response['res_data']['roll'] = roll
-        self.response['res_data']['email'] = email
-        self.response['res_data']['token'] = token
+        # self.response['res_data']['count'] = count
+        # self.response['res_data']['roll'] = roll
+        # self.response['res_data']['email'] = email
+        # self.response['res_data']['token'] = token
         return send_200(self.response)
