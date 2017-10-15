@@ -75,8 +75,8 @@ def send_email(email, password, roll):
     subject = "Change Password " + roll
     to_email = email
     to = [to_email]
-    email_text = "Your password changed to: " + \
-        password + " \nUse this password to reset to new one."
+    email_text = "Your new password is: " + \
+        password + " --> You can change password using this one."
     message_arr = []
     msg = EmailMultiAlternatives(
         subject, email_text, from_email, to)
@@ -253,7 +253,7 @@ class ForgotPassword(View):
                                             \nContact: diginehru@gmail.com"
             return send_400(self.response)
 
-        password = get_random_string(length=6, allowed_chars='1234567890ABCDEF')
+        password = get_random_string(length=4, allowed_chars='1234567890ABCDEF')
         save_password = hashlib.md5(password).hexdigest()
         save_password = hashlib.sha256(save_password).hexdigest()
         st.password = save_password
