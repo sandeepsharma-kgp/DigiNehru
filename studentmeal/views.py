@@ -197,8 +197,8 @@ class MealCount(View):
             time1 = str((int(time) + 2) % 4)
 
         vn_choice = data['vn']
-        time = "3"
-        time1 = str((int(time) + 2) % 4)
+        time = "0"
+        time1 = str((int(time) + 1) % 4)
         veg = 0
         if vn_choice == "VE":
             veg = 1
@@ -222,13 +222,13 @@ class MealCount(View):
             except:
                 eat = None
             if nxt and time == "3":
-                    mealcount.objects.create(student=st, eating_on=eating_on + timedelta(1),
-                                             meals_opted=time1)
+                mealcount.objects.create(student=st, eating_on=eating_on + timedelta(1),
+                                         meals_opted=time1)
             if eat:
                 if time in eat.meals_taken:
                     self.response['res_str'] = "Meal already taken!!"
                     return send_400(self.response)
-                eat.meals_taken.append(time)    
+                eat.meals_taken.append(time)
                 if veg:
                     eat.is_veg.append(time)
                 if nxt and time != "3":
@@ -237,7 +237,7 @@ class MealCount(View):
                 self.response['res_str'] = "You can take your meal"
                 return send_200(self.response)
             else:
-                if nxt:
+                if nxt and time != "3":
                     eat = mealcount.objects.create(student=st, eating_on=eating_on,
                                                    meals_taken=time, meals_opted=time1)
                 else:
