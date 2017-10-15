@@ -157,7 +157,8 @@ class StudentSignUp(View):
                 self.response['res_str'] = "Registration Done!!"
                 return send_200(self.response)
             elif not st:
-                self.response['res_str'] = "You're not in Roll-List.\nContact: diginehru@gmail.com/+918159029529"
+                self.response[
+                    'res_str'] = "You're not in Roll-List.\nContact: diginehru@gmail.com/+918159029529"
                 return send_200(self.response)
             # will be uncommented once to make registration for any-one..
             # commenting here restricts on nehru residents ot get registered as in backend nehru residents will be saved
@@ -300,11 +301,14 @@ class StudentList(View):
         roll = []
         email = []
         token = []
+        count = 0
         for s in st:
             roll.append(s.roll)
             email.append(s.email)
             token.append(s.token)
+            count += 1
 
+        self.response['res_data']['count'] = count
         self.response['res_data']['roll'] = roll
         self.response['res_data']['email'] = email
         self.response['res_data']['token'] = token
