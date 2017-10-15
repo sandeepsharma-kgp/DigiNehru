@@ -46,6 +46,10 @@ class mealcount(models.Model):
     eating_on = models.DateField()
     meals_taken = MultiSelectField(
         choices=TIME_CHOICES, max_choices=4, default=list())
+    meals_opted = MultiSelectField(
+        choices=TIME_CHOICES, max_choices=4, default=list())
+    is_veg = MultiSelectField(
+        choices=TIME_CHOICES, max_choices=4, default=list())
 
     def __unicode__(self):
         return str(self.student) + ' - ' + str(self.eating_on)
