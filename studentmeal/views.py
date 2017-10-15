@@ -174,9 +174,6 @@ class MealCount(View):
             return send_400(self.response)
         id_ = data['id']
         time = "-1"
-        if data['time']:
-            time = data['time']
-            time1 = str((int(time) + 1) % 4)
         dated = datetime.now(pytz.utc)
         hr = datetime.strptime(str(dated.astimezone(tz.gettz('Asia/Kolkata'))),
                                '%Y-%m-%d %H:%M:%S.%f+05:30')
