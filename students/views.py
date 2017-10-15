@@ -287,3 +287,25 @@ class ForgotPassword(View):
 
         self.response['res_str'] = "Your password is changed!"
         return send_200(self.response)
+
+
+class StudentList(View):
+
+    def __init__(self):
+        self.response = init_response()
+
+    def get(self, request, *args, **kwargs):
+        data = request.POST
+        st = Students.objects.filter(status=ACTIVE)
+        roll = []
+        email = []
+        token = []
+        for s in st:
+            roll.append(s.roll)
+            email.append(s.email)
+            token.append(s.token)
+
+        self.response['res_data']['roll'] = roll
+        self.response['res_data']['email'] = email
+        self.response['res_data']['token'] = token
+        return send_200(self.response)
