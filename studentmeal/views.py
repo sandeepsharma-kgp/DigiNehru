@@ -209,7 +209,7 @@ class MealCount(View):
                     self.response['res_str'] = "Meal already taken!!"
                     return send_400(self.response)
                 eat.meals_taken.append(time)
-                eat.vn[time] = vn_choice
+                eat.is_veg.append(vn_choice)
                 eat.save()
                 self.response['res_str'] = "You can take your meal"
                 return send_200(self.response)

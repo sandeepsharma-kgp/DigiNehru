@@ -50,8 +50,6 @@ class mealcount(models.Model):
         choices=TIME_CHOICES, max_choices=4, default=list())
     is_veg = MultiSelectField(
         choices=TIME_CHOICES, max_choices=4, default=list())
-    is_veg_opted = MultiSelectField(
-        choices=TIME_CHOICES, max_choices=4, default=list())
 
     def __unicode__(self):
         return str(self.student) + ' - ' + str(self.eating_on)
