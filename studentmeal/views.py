@@ -166,6 +166,8 @@ class MealCount(View):
         self.response = init_response()
 
     def post(self, request, *args, **kwargs):
+        import ipdb
+        ipdb.set_trace()
         data = request.POST
         if data['d_id'] != '8b72b7475b2ba075':
             self.response['res_str'] = "Wrong Device"
@@ -211,8 +213,6 @@ class MealCount(View):
             return send_400(self.response)
         # for present day entry
         eating_on = datetime.now(pytz.utc).date()
-        import ipdb
-        ipdb.set_trace()
         try:
             st = Students.objects.get(token=id_)
             if st.status == INACTIVE:
