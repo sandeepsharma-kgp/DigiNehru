@@ -247,7 +247,7 @@ class ForgotPassword(View):
         try:
             st = Students.objects.get(roll=roll)
         except:
-            self.response['res_str'] = "You're not a Nehruite!!"
+            self.response['res_str'] = "You're not in Roll-List.\nContact: diginehru@gmail.com/+918159029529"
             return send_400(self.response)
 
         if not st.status:

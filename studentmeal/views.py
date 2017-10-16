@@ -219,7 +219,7 @@ class MealCount(View):
 
             if eat:
                 if time in eat.meals_taken:
-                    self.response['res_str'] = "Meal already taken!!"
+                    self.response['res_str'] = "Meal already received!!"
                     return send_400(self.response)
                 eat.meals_taken.append(time)
                 if nxt and time == "3":
@@ -230,7 +230,7 @@ class MealCount(View):
                 if nxt and time != "3":
                     eat.meals_opted.append(time1)
                 eat.save()
-                self.response['res_str'] = "You can take your meal"
+                self.response['res_str'] = "Thanks, You can take your meal"
                 return send_200(self.response)
             else:
                 if nxt and time == "3":
@@ -245,7 +245,7 @@ class MealCount(View):
                 if veg:
                     eat.is_veg = time
                 eat.save()
-                self.response['res_str'] = "You can take your meal"
+                self.response['res_str'] = "Thanks, You can take your meal"
                 return send_200(self.response)
         except Exception as e:
             print e
