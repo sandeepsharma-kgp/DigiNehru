@@ -168,7 +168,7 @@ class MealCount(View):
     def post(self, request, *args, **kwargs):
 
         data = request.POST
-        if data['d_id'] != '8b72b7475b2ba075':
+        if data['d_id'] not in ['8b72b7475b2ba075', 'f0407087e16a577f']:
             self.response['res_str'] = "Wrong Device"
             return send_400(self.response)
         id_ = data['id']
@@ -199,7 +199,7 @@ class MealCount(View):
         vn_choice = data['vn']
         if vn_choice == "VE":
             veg = 1
-        
+
         if time not in ["0", "1", "2", "3"]:
             self.response['res_str'] = "You are late! Mess is closed!!"
             return send_400(self.response)
