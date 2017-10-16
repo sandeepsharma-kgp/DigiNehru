@@ -166,8 +166,7 @@ class MealCount(View):
         self.response = init_response()
 
     def post(self, request, *args, **kwargs):
-        import ipdb
-        ipdb.set_trace()
+
         data = request.POST
         if data['d_id'] != '8b72b7475b2ba075':
             self.response['res_str'] = "Wrong Device"
@@ -182,9 +181,7 @@ class MealCount(View):
 
         if data['nxt'] == '1':
             nxt = 1
-        ##########
-        hrs = 8
-        #########
+
         if hrs <= 10 and hrs >= 7:
             time = "0"
             time1 = str((int(time) + 1) % 4)
