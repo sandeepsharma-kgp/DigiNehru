@@ -10,3 +10,4 @@ print "Snacks: ", mealcount.objects.filter(eating_on=dt + timedelta(0), meals_ta
 print "Dinner: ", mealcount.objects.filter(eating_on=dt + timedelta(0), meals_taken__icontains='3').count()
 print "Next Lunch: ", mealcount.objects.filter(eating_on=dt + timedelta(0), meals_opted__icontains='1').count()
 print "Next Dinner: ", mealcount.objects.filter(eating_on=dt + timedelta(0), meals_opted__icontains='3').count()
+print "Next Day Lunch: ", mealcount.objects.filter(eating_on=dt + timedelta(1), meals_opted__icontains='1').count()
