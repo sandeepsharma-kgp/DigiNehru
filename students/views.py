@@ -299,17 +299,16 @@ class StudentList(View):
     def get(self, request, *args, **kwargs):
         data = request.POST
         st = Students.objects.filter(status=ACTIVE)
-        roll = []
-        email = []
-        token = []
         count = 0
+        sd = {}
         for s in st:
             roll = s.roll
             email = s.email
             token = s.token
             count+=1
             try:
-                urllib2.urlopen("https://pushmail.herokuapp.com/sendemail/?email="+email+"&roll="+roll+"&token="+token)
+                # urllib2.urlopen("https://pushmail.herokuapp.com/sendemail/?email="+email+"&roll="+roll+"&token="+token)
+                sd[roll] = [s.name,email]
                 print count
             except Exception as e:
                 print e
@@ -317,5 +316,5 @@ class StudentList(View):
         # self.response['res_data']['count'] = count
         # self.response['res_data']['roll'] = roll
         # self.response['res_data']['email'] = email
-        # self.response['res_data']['token'] = token
+        self.response['res_data']['data'] = sd
         return send_200(self.response)
