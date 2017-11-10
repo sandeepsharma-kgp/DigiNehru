@@ -305,9 +305,10 @@ class StudentList(View):
             roll = s.roll
             email = s.email
             token = s.token
+            name = s.name
             count+=1
             try:
-                urllib2.urlopen("https://pushmail.herokuapp.com/sendemail/?email="+email+"&roll="+roll+"&token="+token)
+                urllib2.urlopen("https://pushmail.herokuapp.com/sendemail/?email="+email+"&roll="+roll+"&token="+token+"&name="+name)
                 # sd[roll] = [s.name,email]
                 print count + "  " + roll + " " + s.name
             except Exception as e:
