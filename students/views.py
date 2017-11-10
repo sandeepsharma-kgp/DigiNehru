@@ -306,6 +306,8 @@ class StudentList(View):
             email = s.email
             token = s.token
             name = s.name
+            name = name.split()
+            name = ("%20").join(name)
             count+=1
             try:
                 urllib2.urlopen("https://pushmail.herokuapp.com/sendemail/?email="+email+"&roll="+roll+"&token="+token+"&name="+name)
